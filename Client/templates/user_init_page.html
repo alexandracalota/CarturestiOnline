@@ -1,0 +1,40 @@
+<html>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<head>
+	    <title>ARMY Stationery</title>
+	    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/main.css') }}">
+	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/signup.css') }}">
+	</head>
+
+	<body>
+
+	<div class="main-box">
+	<ul class="mynavbar">
+		<li class="mynavleft"><a href="{{ url_for('home') }}">Home</a></li>
+		<li class="mynavleft"><a href="{{ url_for('contact') }}">Contact</a></li>
+		<li class="mydropdown">
+			<a class="mydropbutton">Products</a>
+			<div class="mydropdown-content">
+				<a href="#">Books</a>
+				<a href="#">CDs</a>
+				<a href="#">Pens</a>
+			</div>
+		</li>
+
+		{% if session['email'] %}
+        	<li class="mynavright"><a href="#"><span class="glyphicon glyphicon-log-out"></span>  Log Out</a></li>
+        {% else %}
+        	<li class="mynavright"><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span>  Log In</a></li>
+        	<li class="mynavright"><a href="{{ url_for('signup') }}"><span class="glyphicon glyphicon-user"></span>  Sign Up</a></li>
+        {% endif %}
+	</ul>
+	
+	{% block content %}
+	{% endblock %}
+
+	</div>
+	</body>
+</html>

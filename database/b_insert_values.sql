@@ -1,4 +1,6 @@
-insert into fields (field_name, max_students)
+
+
+/*insert into fields (field_name, max_students)
 	values("Matematica-Informatica Bilingv-Engleza", 30);
 insert into fields (field_name, max_students)
 	values("Filologie Bilingv-Engleza", 30);
@@ -100,4 +102,4 @@ call enroll_student("Gaga", "E", "Lady", "2900912100009", "Stiintele Naturii", 1
 call enroll_student("Jackson", "T", "Michael", "1700912100009", "Stiintele Naturii", 12);
 
 call enroll_student("Cooper", "T", "Bradley", "2870109890178", "Stiinte Sociale", 11);
-call enroll_student("McAddams", "T", "Rachel", "2840114890178", "Stiinte Sociale", 12);
+call enroll_student("McAddams", "T", "Rachel", "2840114890178", "Stiinte Sociale", 12);*/

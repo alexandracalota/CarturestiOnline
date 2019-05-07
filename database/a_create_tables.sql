@@ -1,57 +1,89 @@
-create table fields (
-	field_ID integer auto_increment primary key,
-	field_name varchar(40) unique not null,
-	max_students integer
+create table customer (
+	customer_id 		integer auto_increment primary key,
+	customer_name 		varchar(20),
+	customer_surname 	varchar(20),
+	email 				varchar(20),
+	password 			varchar(20),
+	phone_number 		varchar(20),
+	address_line_1 		varchar(20),
+	address_line_2 		varchar(20),
+	city 				varchar(20),
+	country 			varchar(20)
 );
 
-create table subjects (
-	subject_ID integer auto_increment primary key,
-	subject_name varchar(20) 
+create table product_type (
+	product_type_code 	integer auto_increment primary key,
+	parent_type_code	integer,
+	product_type_name	varchar(20),
+	description			varchar(200)
 );
 
-create table subjects_fields (
-	subject_ID varchar(20),
-	field_ID integer,
-	hours integer
+create table product (
+	product_id 			integer auto_increment primary key,
+	product_type_code 	integer,
+	product_name		varchar(20),
+	price				integer,
+	items				integer,
+	description			varchar(200),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
 );
 
-create table teachers (
-	prof_ID integer auto_increment primary key,
-	surname varchar(20),
-	name varchar(20),
-	subject_ID integer not null,
-	hiredate date,
-	FOREIGN KEY (subject_ID) REFERENCES subjects(subject_ID)
+create table cart (
+	cart_id				integer auto_increment primary key,
+	customer_id			integer,
+	status				varchar(20),
+	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
-create table classes (
-	class_ID integer auto_increment primary key,
-	no_students integer,
-	max_students integer,
-	hometeacher_ID integer,
-	field_ID integer,
-	year integer,
-	FOREIGN KEY (field_ID) REFERENCES fields(field_ID),
-	FOREIGN KEY (hometeacher_ID) REFERENCES teachers(prof_ID)
+create table cart_item (
+	cart_id				integer,
+	customer_id			integer,
+	number_of_items		integer,
+	total_price			integer,
+	PRIMARY KEY (cart_id, customer_id),
+	FOREIGN KEY (cart_id) REFERENCES cart(cart_id),	
+	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
-create table students (
-	student_ID integer primary key auto_increment,
-	surname varchar(20) not null,
-	father_init varchar(1) not null,
-	name varchar(20) not null,
-	CNP varchar(20) unique,
-	class_ID integer,
-	FOREIGN KEY (class_ID) REFERENCES classes(class_ID)
+create table book (
+	product_id			integer,
+	product_type_code	integer,
+	author				varchar(40),
+	year				integer,
+	genre				varchar(20),
+	PRIMARY KEY (product_id, product_type_code),
+	FOREIGN KEY (product_id) REFERENCES product(product_id),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
 );
 
-create table grades (
-	student_ID integer not null,
-	subject_ID integer not null,
-	grade1 integer DEFAULT 0,
-	grade2 integer DEFAULT 0,
-	grade3 integer DEFAULT 0,
-	grade4 integer DEFAULT 0,
-	FOREIGN KEY (subject_ID) REFERENCES subjects(subject_ID),
-	FOREIGN KEY (student_ID) REFERENCES students(student_ID)
+create table cd (
+	product_id			integer,
+	product_type_code	integer,
+	artist				varchar(40),
+	year				integer,
+	genre				varchar(20),
+	PRIMARY KEY (product_id, product_type_code),
+	FOREIGN KEY (product_id) REFERENCES product(product_id),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
+);
+
+create table notebook (
+	product_id			integer,
+	product_type_code	integer,
+	type				varchar(40),
+	size				integer,
+	PRIMARY KEY (product_id, product_type_code),
+	FOREIGN KEY (product_id) REFERENCES product(product_id),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
+);
+
+create table pen (
+	product_id			integer,
+	product_type_code	integer,
+	type				varchar(40),
+	number_of_pens		integer,
+	manufacturer		varchar(20),
+	PRIMARY KEY (product_id, product_type_code),
+	FOREIGN KEY (product_id) REFERENCES product(product_id),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
 );
