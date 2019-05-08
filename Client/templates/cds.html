@@ -14,6 +14,9 @@
 		<th>Year</th>
 		<th>Genre</th>
 		<th>Price</th>
+		{% if session['email'] %}
+			<th>To cart</th>
+		{% endif %}
 	</tr>
 
 	{% for i in range(data.shape[0]) %}
@@ -21,6 +24,9 @@
 		{% for j in range(data.shape[1]) %}
 			<td>{{ data.iloc[i][j] }}</td>
 		{% endfor %}
+		{% if session['email'] %}
+  			<td><button type="submit" class="otherbtn">Add to cart</button></td>
+		{% endif %}
 		</tr>
 	{% endfor %}
 	

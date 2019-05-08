@@ -93,7 +93,7 @@ def books():
 		query += 'product.price from product, book where product.product_id = book.product_id'
 		df = pd.read_sql(query, mysql.connection)
 
-		return render_template('cart.html', data=df)
+		return render_template('books.html', data=df)
 
 @server.route('/cds', methods = ['GET', 'POST'], endpoint='cds')
 def cds():
