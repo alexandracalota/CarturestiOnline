@@ -1,185 +1,220 @@
-import mysql.connector
 import string
 import random
-from flask import Flask, render_template, request, redirect, url_for
+import pandas as pd
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mysqldb import MySQL
 from copy import deepcopy
 
 server = Flask(__name__)
 
-config = {
-    'user': 'student',
-    'password': 'student',
-    'host': 'database',
-    'port': '3306',
-    'database': 'db_carturesti'
-}
+server.config['MYSQL_HOST'] = 'database'
+server.config['MYSQL_USER'] = 'student'
+server.config['MYSQL_PASSWORD'] = 'student'
+server.config['MYSQL_DB'] = 'db_carturesti'
+server.config['MYSQL_PORT'] = 3306
 
-# @server.route('/teachers', methods = ['GET'], endpoint='teachersGetEndpoint')
-# def teachers_get():
-# 	connection = mysql.connector.connect(**config)
-# 	cursor = connection.cursor(buffered=True)
+mysql = MySQL(server)
 
-# 	cursor.execute('select teachers.prof_ID, teachers.surname, teachers.name, teachers.subject_ID, teachers.hiredate,' +
-# 		' classes.class_ID from teachers, classes where classes.hometeacher_ID = teachers.prof_ID')
-# 	result = str(cursor.fetchall())
+@server.route('/users', methods = ['GET', 'POST'], endpoint='users')
+def users():
+	if request.method == 'GET':		
+		query = 'select customer_id, customer_name, customer_surname, email '
+		query += 'from customer'
+		df = pd.read_sql(query, mysql.connection)
 
-# 	cursor.close()
-# 	connection.commit()
-# 	connection.close()
-
-# 	return result
+		return render_template('users.html', data=df)
 
 
+@server.route('/add_book', methods = ['GET', 'POST'], endpoint='add_book')
+def add_book():
+	if request.method == 'GET':
+		return render_template('add_book.html')
+	else:
+		product_name = request.form['name']
+		items = request.form['items']
+		price = request.form['price']
+		description = request.form['description']
+		author = request.form['author']
+		year = request.form['year']
+		genre = request.form['genre']
 
-# @server.route('/showgrades', methods = ['POST'], endpoint='showGradesGPostEndpoint')
-# def show_grades_post():
-# 	connection = mysql.connector.connect(**config)
-# 	cursor = connection.cursor(buffered=True)
+		args = [product_name, price, items, description, author, year, genre]
 
-# 	args = []
+		cur = mysql.connection.cursor()
+		
+		cur.callproc('add_book', tuple(args))
 
-# 	args.append(request.form['surname'])
-# 	args.append(request.form['father'])
-# 	args.append(request.form['name'])
-# 	args.append(request.form['subject'])
+		mysql.connection.commit()
+		cur.close()
 
-# 	cursor.execute('select get_grades(%s, %s, %s, %s)', tuple(args))
-# 	result = cursor.fetchall()
+		return redirect(url_for('books'))
 
-# 	cursor.close()
-# 	connection.commit()
-# 	connection.close()
+@server.route('/add_cd', methods = ['GET', 'POST'], endpoint='add_cd')
+def add_cd():
+	if request.method == 'GET':
+		return render_template('add_cd.html')
+	else:
+		product_name = request.form['name']
+		items = request.form['items']
+		price = request.form['price']
+		description = request.form['description']
+		artist = request.form['artist']
+		year = request.form['year']
+		genre = request.form['genre']
 
-# 	return str(result[0][0]).replace('|', '\n')
+		args = [product_name, price, items, description, artist, year, genre]
 
-# @server.route('/showgrades', methods = ['GET'], endpoint='showGradesGetEndpoint')
-# def show_grades_get():
-# 	return render_template('show_grades.html')
+		cur = mysql.connection.cursor()
+		
+		cur.callproc('add_cd', tuple(args))
 
+		mysql.connection.commit()
+		cur.close()
 
-
-# @server.route('/addgrade', methods = ['POST'], endpoint='addGradeGPostEndpoint')
-# def add_grade_post():
-# 	connection = mysql.connector.connect(**config)
-# 	cursor = connection.cursor(buffered=True)
-
-# 	args = []
-
-# 	args.append(request.form['surname'])
-# 	args.append(request.form['father'])
-# 	args.append(request.form['name'])
-# 	args.append(request.form['subject'])
-# 	args.append(int(request.form['grade']))
-
-# 	cursor.callproc('add_grade', tuple(args))
-
-# 	cursor.execute('select * from grades')
-# 	result = str(cursor.fetchall())
-
-# 	cursor.close()
-# 	connection.commit()
-# 	connection.close()
-
-# 	return render_template('success_grade_added.html')
-
-# @server.route('/addgrade', methods = ['GET'], endpoint='addGradeGetEndpoint')
-# def add_grade_get():
-# 	return render_template('add_grade.html')
+		return redirect(url_for('cds'))
 
 
+@server.route('/add_pen', methods = ['GET', 'POST'], endpoint='add_pen')
+def add_pen():
+	if request.method == 'GET':
+		return render_template('add_pen.html')
+	else:
+		product_name = request.form['name']
+		items = request.form['items']
+		price = request.form['price']
+		description = request.form['description']
+		p_type = request.form['type']
+		number_of_pens = request.form['number']
+		manufacturer = request.form['manufacturer']
 
-# @server.route('/enroll', methods = ['POST'], endpoint='enrollPostEndpoint')
-# def enroll_get():
-# 	connection = mysql.connector.connect(**config)
-# 	cursor = connection.cursor(buffered=True)
+		args = [product_name, price, items, description, p_type, number_of_pens, manufacturer]
 
-# 	args = []
+		cur = mysql.connection.cursor()
+		
+		cur.callproc('add_pen', tuple(args))
 
-# 	args.append(request.form['surname'])
-# 	args.append(request.form['father'])
-# 	args.append(request.form['name'])
-# 	args.append(request.form['CNP'])
-# 	args.append(request.form['field'])
-# 	args.append(int(request.form['year']))
+		mysql.connection.commit()
+		cur.close()
 
-# 	cursor.callproc('enroll_student', tuple(args))
-
-# 	cursor.execute('select * from students')
-# 	result = str(cursor.fetchall())
-
-# 	cursor.close()
-# 	connection.commit()
-# 	connection.close()
-
-# 	return render_template('sucess_enrollment.html')
-
-# @server.route('/enroll', methods = ['GET'], endpoint='enrollGetEndpoint')
-# def enroll_get():
-# 	return render_template('enroll.html')
+		return redirect(url_for('pens'))
 
 
+@server.route('/add_notebook', methods = ['GET', 'POST'], endpoint='add_notebook')
+def add_notebook():
+	if request.method == 'GET':
+		return render_template('add_notebook.html')
+	else:
+		product_name = request.form['name']
+		items = request.form['items']
+		price = request.form['price']
+		description = request.form['description']
+		p_type = request.form['type']
+		size = request.form['size']
 
-# @server.route('/classes', methods = ['GET'], endpoint='classesGetEndpoint')
-# def classes_get():
-# 	connection = mysql.connector.connect(**config)
-# 	cursor = connection.cursor(buffered=True)
+		args = [product_name, items, price, description, p_type. size]
 
-# 	cursor.execute('select classes.class_ID, students.name, students.surname from students,' +
-# 		' classes order by classes.class_ID')
-# 	result = str(cursor.fetchall())
-# 	result += '\n'
+		cur = mysql.connection.cursor()
+		
+		cur.callproc('add_notebook', tuple(args))
 
-# 	cursor.close()
-# 	connection.commit()
-# 	connection.close()
+		mysql.connection.commit()
+		cur.close()
 
-# 	return result
-
-
-
-# @server.route('/menu', methods = ['POST'], endpoint='menuPostEndpoint')
-# def menu_post():
-# 	global loggedin
-# 	option = request.form['option']
-# 	if option == "teachers":
-# 		return redirect(url_for('teachersGetEndpoint'))
-# 	elif option == "classes":
-# 		return redirect(url_for('classesGetEndpoint'))
-# 	elif option == "enroll":
-# 		return redirect(url_for('enrollGetEndpoint'))
-# 	elif option == "add_grade":
-# 		return redirect(url_for('addGradeGetEndpoint'))
-# 	elif option == "show_grades":
-# 		return redirect(url_for('showGradesGetEndpoint'))
+		return redirect(url_for('notebooks'))
 
 
-# @server.route('/menu', methods = ['GET'], endpoint='menuGetEndpoint')
-# def menu_get():
-# 	return render_template('menu.html')
+@server.route('/update', methods = ['GET', 'POST'], endpoint='update')
+def update():
+	if request.method == 'GET':
+		return render_template('update.html')
+	else:
+		p_id = request.form['p_id']
+		quantity = request.form['quantity']
 
-# @server.route('/', methods = ['POST'], endpoint='mainPost')
-# def main_page_post():
-# 	global loggedin
-# 	if request.form['username'] == "student":
-# 		if request.form['password'] == "student":
-# 			loggedin = True
-# 			return redirect(url_for('userEndpoint'))
-# 		else:
-# 			return redirect(url_for('mainGet'))
-# 	elif request.form['username'] == "root":
-# 		if request.form['password'] == "mypass":
-# 			loggedin = True
-# 			return redirect(url_for('userEndpoint'))
-# 		else:
-# 			return redirect(url_for('mainGet'))
-# 	else:
-# 		return redirect(url_for('mainGet'))
+		args = [int(p_id), quantity]
 
-# @server.route('/', methods = ['GET'], endpoint='mainGet')
-# def main_page_get():
-# 	return render_template('init_page.html')
+		cur = mysql.connection.cursor()
+		
+		cur.callproc('update_product', tuple(args))
 
-# loggedin = False
+		mysql.connection.commit()
+		cur.close()
 
-if __name__ == '__main__':
-    server.run(host='0.0.0.0', debug=True, port=5000)
+		return render_template("update.html", id=p_id)
+
+
+
+@server.route('/books', methods = ['GET', 'POST'], endpoint='books')
+def books():
+	if request.method == 'GET':		
+		query = 'select product.product_id, product.product_name, book.author, book.year, book.genre, '
+		query += 'product.price, product.items from product, book where product.product_id = book.product_id'
+		df = pd.read_sql(query, mysql.connection)
+
+		return render_template('books.html', data=df)
+
+@server.route('/cds', methods = ['GET', 'POST'], endpoint='cds')
+def cds():
+	if request.method == 'GET':
+		query = 'select product.product_id, product.product_name, cd.artist, cd.year, cd.genre, '
+		query += 'product.price, product.items from product, cd where product.product_id = cd.product_id'
+		df = pd.read_sql(query, mysql.connection)
+
+		return render_template('cds.html', data=df)
+
+@server.route('/pens', methods = ['GET', 'POST'], endpoint='pens')
+def pens():
+	if request.method == 'GET':
+		query = 'select product.product_id, product.product_name, pen.type, pen.number_of_pens, pen.manufacturer, '
+		query += 'product.price, product.items from product, pen where product.product_id = pen.product_id'
+		df = pd.read_sql(query, mysql.connection)
+		
+		return render_template('pens.html', data=df)
+
+@server.route('/notebooks', methods = ['GET', 'POST'], endpoint='notebooks')
+def notebooks():
+	if request.method == 'GET':
+		query = 'select product.product_id, product.product_name, notebook.type, notebook.size, '
+		query += 'product.price, product.items from product, notebook where product.product_id = notebook.product_id'
+		df = pd.read_sql(query, mysql.connection)
+		
+		return render_template('notebooks.html', data=df)
+
+@server.route('/login', methods = ['GET', 'POST'], endpoint='login')
+def login():
+	if request.method == 'GET':
+		return render_template("login.html")
+	else:
+		user = request.form['user']
+		password = request.form['psw']
+
+		if user == 'admin' and password == 'admin':
+			session['admin'] = 'admin'
+
+		return redirect(url_for('home'))
+
+@server.route('/logout', methods= ['GET', 'POST'], endpoint='logout')
+def logout():
+	session['admin'] = None
+
+	return redirect(url_for('home'))
+
+@server.route('/menu', methods = ['GET', 'POST'], endpoint='menu')
+def menu():
+	if request.method == 'GET':
+		return render_template("menu.html")
+
+@server.route('/home', methods = ['GET', 'POST'], endpoint='home')
+def home():
+	if 'admin' in session and session['admin']:
+		return redirect(url_for('menu'))
+	else:
+		return redirect(url_for('login'))
+
+@server.route('/', methods = ['GET'], endpoint='admin')
+def main_page():
+	return redirect(url_for('home'))
+
+if __name__ == '__main__':	
+	server.secret_key = "\xf0?a\x9a\\\xff\xd4;\x0c\xcbHi"
+	server.run(host='0.0.0.0', debug=True, port=5050)

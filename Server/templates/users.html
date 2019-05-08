@@ -1,19 +1,18 @@
-{% extends "user_init_page.html" %}
+{% extends "admin_init_page.html" %}
 {% block content %}
 
 <div class="home-image">
   <div class="mytitle">
-    <a>ARMY Stationery</a>
+    <a>ARMY Stationery - ADMIN</a>
   </div>
 </div>
 
 <table id="products">
 	<tr>
-		<th>Title</th>
-		<th>Author</th>
-		<th>Year</th>
-		<th>Genre</th>
-		<th>Price</th>
+		<th>Customer ID</th>
+		<th>Name</th>
+		<th>Surname</th>
+		<th>Email</th>
 	</tr>
 
 	{% for i in range(data.shape[0]) %}

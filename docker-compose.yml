@@ -3,11 +3,12 @@ version: '3'
 services:
     database:
         image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
         ports:
             - "3306"
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: mypass
+            MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: db_carturesti
             MYSQL_USER: student
             MYSQL_PASSWORD: student
@@ -16,14 +17,16 @@ services:
         security_opt:
             - seccomp:unconfined
     server:
-        build: ./Server
-        links:
-            - database
-        ports:
-            - 5000:5000
-    client:
-        build: ./Client
+        # build: ./Server
+        image: allexac/carturestionline:latest
         links:
             - database
         ports:
             - 5050:5050
+    client:
+        # build: ./Client
+        image: allexac/carturestionline:client
+        links:
+            - database
+        ports:
+            - 5000:5000

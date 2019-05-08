@@ -91,6 +91,7 @@ li.mydropdown {
 
 .main-box {
   width: 1110px;
+  min-height: 500px;
   border: 5px solid #FAF0E6;
   display: block;
   margin: auto;

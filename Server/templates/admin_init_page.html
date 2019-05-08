@@ -6,8 +6,9 @@
 	    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/main.css') }}">
-	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/signup.css') }}">
+	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/signup.css') }}">	    
 	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/table.css') }}">
+	    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static',filename='css/menu.css') }}">
 	</head>
 
 	<body>
@@ -15,7 +16,7 @@
 	<div class="main-box">
 	<ul class="mynavbar">
 		<li class="mynavleft"><a href="{{ url_for('home') }}">Home</a></li>
-		<li class="mynavleft"><a href="{{ url_for('contact') }}">Contact</a></li>
+		<li class="mynavleft"><a href="{{ url_for('menu') }}">Menu</a></li>
 		<li class="mydropdown">
 			<a class="mydropbutton">Products</a>
 			<div class="mydropdown-content">
@@ -26,12 +27,8 @@
 			</div>
 		</li>
 
-		{% if session['email'] %}
+		{% if session['admin'] %}
         	<li class="mynavright"><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span>  Log Out</a></li>
-        	<li class="mynavright"><a href="{{ url_for('cart') }}">Cart</a></li>
-        {% else %}
-        	<li class="mynavright"><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span>  Log In</a></li>
-        	<li class="mynavright"><a href="{{ url_for('signup') }}"><span class="glyphicon glyphicon-user"></span>  Sign Up</a></li>
         {% endif %}
 	</ul>
 	

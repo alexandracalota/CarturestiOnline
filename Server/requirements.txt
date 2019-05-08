@@ -1,2 +1,4 @@
 Flask
+flask_mysqldb
 mysql-connector-python
+pandas

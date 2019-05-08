@@ -1,0 +1,46 @@
+{% extends "admin_init_page.html" %}
+{% block content %}
+
+<div class="home-image">
+  <div class="mytitle">
+    <a>ARMY Stationery - ADMIN</a>
+  </div>
+</div>
+
+<div class="form-box">
+<form style="border:1px solid #ccc" method="POST">
+  <div class="signup-container">
+    <h1>Add Notebook</h1>
+    <p>Please fill in this form to add a new product of type pen.</p>
+    <hr>
+
+    <label for="name"><b>Name</b></label>
+    <input type="text" placeholder="Enter product name" name="name" required>
+
+    <label for="items"><b>Number of items</b></label>
+    <input type="text" placeholder="Enter number of items" name="items" required>
+
+    <label for="price"><b>Price</b></label>
+    <input type="text" placeholder="Enter Price" name="price" required>
+
+    <label for="description"><b>Description</b></label>
+    <input type="text" placeholder="Enter product description" name="description" required>
+
+    <label for="type"><b>Type</b></label>
+    <input type="text" placeholder="Enter notebook type" name="type" required>
+
+    <label for="number"><b>Number of pens in pack</b></label>
+    <input type="text" placeholder="Enter number of pens" name="number" required>
+
+    <label for="manufacturer"><b>Manufacturer</b></label>
+    <input type="text" placeholder="Enter manufacturer" name="manufacturer" required>
+
+    <div class="clearfix">
+      <button type="submit" class="signupbtn">Add product</button>
+    </div>
+  </div>
+</form>
+</div>
+
+
+{% endblock %}

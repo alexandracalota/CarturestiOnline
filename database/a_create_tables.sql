@@ -2,7 +2,7 @@ create table customer (
 	customer_id 		integer auto_increment primary key,
 	customer_name 		varchar(20),
 	customer_surname 	varchar(20),
-	email 				varchar(20),
+	email 				varchar(40) unique,
 	password 			varchar(20),
 	phone_number 		varchar(20),
 	address_line_1 		varchar(20),
@@ -11,23 +11,26 @@ create table customer (
 	country 			varchar(20)
 );
 
+-- 1 = book
+-- 2 = cd
+-- 3 = pen
+-- 4 = notebook
 create table product_type (
 	product_type_code 	integer auto_increment primary key,
-	parent_type_code	integer,
-	product_type_name	varchar(20),
-	description			varchar(200)
+	product_type_name	varchar(20)
 );
 
 create table product (
 	product_id 			integer auto_increment primary key,
 	product_type_code 	integer,
-	product_name		varchar(20),
+	product_name		varchar(200),
 	price				integer,
 	items				integer,
 	description			varchar(200),
 	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
 );
 
+-- status is final or notfinal
 create table cart (
 	cart_id				integer auto_increment primary key,
 	customer_id			integer,
@@ -38,6 +41,7 @@ create table cart (
 create table cart_item (
 	cart_id				integer,
 	customer_id			integer,
+	product_id			integer,
 	number_of_items		integer,
 	total_price			integer,
 	PRIMARY KEY (cart_id, customer_id),
@@ -67,22 +71,22 @@ create table cd (
 	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
 );
 
-create table notebook (
-	product_id			integer,
-	product_type_code	integer,
-	type				varchar(40),
-	size				integer,
-	PRIMARY KEY (product_id, product_type_code),
-	FOREIGN KEY (product_id) REFERENCES product(product_id),
-	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
-);
-
 create table pen (
 	product_id			integer,
 	product_type_code	integer,
 	type				varchar(40),
 	number_of_pens		integer,
 	manufacturer		varchar(20),
+	PRIMARY KEY (product_id, product_type_code),
+	FOREIGN KEY (product_id) REFERENCES product(product_id),
+	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)
+);
+
+create table notebook (
+	product_id			integer,
+	product_type_code	integer,
+	type				varchar(40),
+	size				integer,
 	PRIMARY KEY (product_id, product_type_code),
 	FOREIGN KEY (product_id) REFERENCES product(product_id),
 	FOREIGN KEY (product_type_code) REFERENCES product_type(product_type_code)

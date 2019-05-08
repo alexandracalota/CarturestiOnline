@@ -5,6 +5,5 @@ COPY requirements.txt /Server
 RUN pip install -r requirements.txt
 COPY server.py /Server
 COPY templates /Server/templates
-ENV DISPLAY :0
-ENV HOME /home/docker
+COPY static /Server/static/
 CMD python server.py
